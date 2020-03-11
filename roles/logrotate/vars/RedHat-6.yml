@@ -7,6 +7,6 @@ logrotate_compression_packages:
   gzip: gzip
   bzip2: bzip2
   lz4: lz4
-logrotate_status_file: /var/lib/logrotate/logrotate.status
-logrotate_separate_xtmp: true
+logrotate_status_file: /var/lib/logrotate.status
+logrotate_separate_xtmp: false
 ...
