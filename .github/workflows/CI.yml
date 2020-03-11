@@ -1,0 +1,97 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '40 12 * * 6'
+
+jobs:
+  logrotate:
+
+    runs-on: ubuntu-18.04
+
+    strategy:
+
+      fail-fast: false
+
+      matrix:
+
+        target:
+        - centos_7
+        - centos_8
+        - centos_6
+        - ubuntu_1804
+        - ubuntu_1604
+        - fedora_31
+        - fedora_30
+
+        include:
+
+        - target: centos_7
+          distribution: centos
+          version: 7
+
+        - target: centos_8
+          distribution: centos
+          version: 8
+
+        - target: centos_6
+          distribution: centos
+          version: 6
+
+        - target: ubuntu_1804
+          distribution: ubuntu
+          version: bionic
+
+        - target: ubuntu_1604
+          distribution: ubuntu
+          version: xenial
+
+        - target: fedora_31
+          distribution: fedora
+          version: 31
+
+        - target: fedora_30
+          distribution: fedora
+          version: 30
+
+    env:
+      CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
+      CI_CONTAINER_TAG: ${{ matrix.version }}
+      CI_CONTAINER_PRIVILEGED: true
+
+    steps:
+
+      - name: checkout collection
+        uses: actions/checkout@v1
+        with:
+          path: ansible_collections/mafalb/logrotate
+
+      - name: checkout collection
+        uses: actions/checkout@v2
+        with:
+          path: ansible_collections/mafalb/ansible
+          repository: mafalb/ansible-collection-ansible
+          ref: dev
+
+      - name: mv ansible
+        run: |
+          mkdir -p ~/.ansible/collections/ansible_collections/mafalb
+          mv ansible_collections/mafalb/ansible ~/.ansible/collections/ansible_collections/mafalb/
+
+#      - name: install dependencies
+#        run: ansible-galaxy collection install -r molecule/requirements.yml
+
+      - name: install molecule
+        run: ansible-playbook -D molecule/install_molecule.yml
+
+      - name: run molecule tests
+        run: |
+          source ~/.virtualenvs/molecule/bin/activate
+          PY_COLORS=1 CI_CONTAINER_PRIVILEGED=true CI_CONTAINER_IMAGE=$CI_CONTAINER_IMAGE CI_CONTAINER_TAG=$CI_CONTAINER_TAG molecule test
+
+...

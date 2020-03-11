@@ -1,0 +1,39 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: OS specific variables
+  include_vars:
+    file: "{{ ansible_os_family }}.yml"
+
+- block:
+  - debug: var=logrotate_compression_packages
+  - debug: var=logrotate_retention_days|type_debug
+  - debug: var=logrotate_frequency|type_debug
+  - debug:
+      msg: "{{ logrotate_retention_days|rotate(logrotate_frequency) }}"
+  tags:
+  - never
+  - debug
+
+- name: assertions
+  assert:
+    that:
+    - logrotate_retention_days|type_debug == "int"
+    - logrotate_frequency|type_debug == "AnsibleUnicode"
+    - btmp_permissions|type_debug == "AnsibleUnicode"
+
+- name: logrotate and dependencies are installed
+  package:
+    name:
+    - rsyslog
+    - logrotate
+    - "{{ logrotate_compression_packages[logrotate_compression] }}"
+    state: present
+
+- name: logrotate is configured
+  template:
+    src: logrotate.conf.j2
+    dest: /etc/logrotate.conf
+    backup: yes
+
+...

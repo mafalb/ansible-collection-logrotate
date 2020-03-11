@@ -1,0 +1,28 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: Verify
+  hosts: all
+
+  vars:
+    logrotate_status_file:
+      Debian: /var/lib/logrotate/status
+      RedHat: /var/lib/logrotate/logrotate.status
+
+  tasks:
+
+  - name: run logrotate # noqa 301
+    check_mode: false
+    command: /etc/cron.daily/logrotate
+
+  - name: get status info
+    stat:
+      path: "{{ logrotate_status_file[ansible_os_family] }}"
+    register: _logrotate_status
+
+  - debug: var=_logrotate_status
+  - assert:
+      that:
+      - _logrotate_status.stat.size > 300
+
+...
