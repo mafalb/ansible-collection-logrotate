@@ -21,7 +21,12 @@
     register: _logrotate_status
 
   - debug: var=_logrotate_status
-  - assert:
+    tags:
+    - never
+    - debug
+
+  - name: assertions
+    assert:
       that:
       - _logrotate_status.stat.size > 300
 
