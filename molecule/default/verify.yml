@@ -5,6 +5,8 @@
   hosts: all
 
   vars:
+    logrotate_main_config: /etc/logrotate.conf
+    logrotate_min_status_size: 175
     logrotate_status_file:
       Debian: /var/lib/logrotate/status
       RedHat: /var/lib/logrotate/logrotate.status
@@ -28,6 +30,12 @@
   - name: assertions
     assert:
       that:
-      - _logrotate_status.stat.size > 300
+      - _logrotate_status.stat.size > {{ logrotate_min_status_size }}
+      - logrotate_main_config|length > 0
+
+  - name: xtmp is rotated
+    when:
+    - ansible_os_family == 'RedHat' and ansible_distribution_major_version < '8'
+    command: grep -q '^/var/log/btmp' {{ logrotate_main_config }}
 
 ...

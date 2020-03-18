@@ -9,4 +9,5 @@ logrotate_compression_packages:
   lz4: lz4
 logrotate_status_file: /var/lib/logrotate/logrotate.status
 logrotate_separate_xtmp: false
+
 ...

@@ -8,6 +8,6 @@ logrotate_compression_packages:
   bzip2: bzip2
   lz4: liblz4-tool
 logrotate_status_file: /var/lib/logrotate/status
-logrotate_separate_xmtp: false
+logrotate_separate_xtmp: false
 
 ...

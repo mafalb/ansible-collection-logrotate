@@ -2,8 +2,11 @@
 ---
 
 - name: OS specific variables
+  with_first_found:
+  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+  - "{{ ansible_os_family }}.yml"
   include_vars:
-    file: "{{ ansible_os_family }}.yml"
+    file: "{{ item }}"
 
 - block:
   - debug: var=logrotate_compression_packages
@@ -21,6 +24,8 @@
     - logrotate_retention_days|type_debug == "int"
     - logrotate_frequency|type_debug == "AnsibleUnicode"
     - btmp_permissions|type_debug == "AnsibleUnicode"
+    - logrotate_separate_xtmp is defined
+    - logrotate_separate_xtmp|type_debug == "bool"
 
 - name: logrotate and dependencies are installed
   package:

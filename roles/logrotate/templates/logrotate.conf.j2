@@ -33,7 +33,7 @@ nocompress
 # packages drop log rotation information into this directory
 include /etc/logrotate.d
 
-{% if not logrotate_separate_xtmp %}
+{% if logrotate_separate_xtmp|bool == false %}
 # no packages own wtmp and btmp -- we'll rotate them here
 /var/log/wtmp {
     monthly
@@ -45,7 +45,6 @@ include /etc/logrotate.d
 # set restricitive permissions
 #
 /var/log/btmp {
-    missingok
     monthly
     create {{ btmp_permissions }} root utmp
     rotate 1
