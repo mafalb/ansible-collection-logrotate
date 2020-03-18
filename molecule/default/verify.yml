@@ -9,7 +9,7 @@
     logrotate_min_status_size: 175
     logrotate_status_file:
       Debian: /var/lib/logrotate/status
-      RedHat: /var/lib/logrotate/logrotate.status
+      RedHat: "{{ '/var/lib/logrotate.status' if ansible_distribution_major_version == 6 or '/var/lib/logrotate/logrotate.status' }}"
 
   tasks:
 

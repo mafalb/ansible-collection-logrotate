@@ -22,7 +22,7 @@ jobs:
 
         target:
         - centos_7
-#        - centos_8
+        - centos_8
 #        - centos_6
         - ubuntu_1804
         - ubuntu_1604
@@ -34,35 +34,41 @@ jobs:
         - target: centos_7
           distribution: centos
           version: 7
+          dockerfile: Dockerfile.j2
 
         - target: centos_8
           distribution: centos
           version: 8
+          dockerfile: Dockerfile.j2
 
         - target: centos_6
           distribution: centos
           version: 6
+          dockerfile: Dockerfile-centos6.j2
 
         - target: ubuntu_1804
           distribution: ubuntu
           version: bionic
+          dockerfile: Dockerfile.j2
 
         - target: ubuntu_1604
           distribution: ubuntu
           version: xenial
+          dockerfile: Dockerfile.j2
 
-        - target: fedora_31
-          distribution: fedora
-          version: 31
+#       - target: fedora_31
+#          distribution: fedora
+#         version: 31
 
-        - target: fedora_30
-          distribution: fedora
-          version: 30
+#       - target: fedora_30
+#          distribution: fedora
+#          version: 30
 
     env:
       CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
       CI_CONTAINER_TAG: ${{ matrix.version }}
       CI_CONTAINER_PRIVILEGED: true
+      CI_DOCKERFILE: ${{ matrix.dockerfile }}
 
     steps:
 
