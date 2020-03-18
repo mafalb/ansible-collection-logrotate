@@ -23,7 +23,7 @@ jobs:
         target:
         - centos_7
         - centos_8
-#        - centos_6
+        - centos_6
         - ubuntu_1804
         - ubuntu_1604
 #        - fedora_31
