@@ -9,13 +9,15 @@
     logrotate_min_status_size: 175
     logrotate_status_file:
       Debian: /var/lib/logrotate/status
-      RedHat: "{{ '/var/lib/logrotate.status' if ansible_distribution_major_version == 6 else '/var/lib/logrotate/logrotate.status' }}"
+      RedHat: "{{ '/var/lib/logrotate.status' if ansible_distribution_major_version == '6' else '/var/lib/logrotate/logrotate.status' }}"
 
   tasks:
 
   - name: run logrotate # noqa 301
     check_mode: false
     command: /etc/cron.daily/logrotate
+
+  - debug: var=logrotate_status_file[ansible_os_family]
 
   - name: get status info
     stat:

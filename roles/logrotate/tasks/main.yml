@@ -12,6 +12,7 @@
   - debug: var=logrotate_compression_packages
   - debug: var=logrotate_retention_days|type_debug
   - debug: var=logrotate_frequency|type_debug
+  - debug: var=logrotate_status_file
   - debug:
       msg: "{{ logrotate_retention_days|rotate(logrotate_frequency) }}"
   tags:
