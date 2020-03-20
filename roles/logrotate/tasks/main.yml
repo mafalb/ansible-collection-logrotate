@@ -42,5 +42,6 @@
     src: logrotate.conf.j2
     dest: /etc/logrotate.conf
     backup: yes
+    validate: logrotate -dv %s
 
 ...
