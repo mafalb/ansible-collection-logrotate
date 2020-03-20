@@ -24,7 +24,10 @@ def rotate(days, frequency):
         "yearly": 365
     }
 
-    return int(days / divisor[frequency])
+    if (int(days / divisor[frequency]) == 0):
+        return 1
+    else:
+        return int(days / divisor[frequency])
 
 
 class FilterModule(object):

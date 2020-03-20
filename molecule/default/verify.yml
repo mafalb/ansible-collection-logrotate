@@ -13,6 +13,16 @@
 
   tasks:
 
+  - debug: var=5|rotate('weekly')
+
+  - name: assertitons for rotate()
+    assert:
+      that:
+      - 30|rotate('weekly') == 4
+      - 5|rotate('weekly') == 1
+      - 0|rotate('daily') == 1
+      - 730|rotate('yearly') == 2
+
   - name: run logrotate # noqa 301
     check_mode: false
     command: /etc/cron.daily/logrotate

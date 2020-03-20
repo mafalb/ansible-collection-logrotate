@@ -23,6 +23,7 @@
   assert:
     that:
     - logrotate_retention_days|type_debug == "int"
+    - logrotate_retention_days > 0
     - logrotate_frequency|type_debug == "AnsibleUnicode"
     - btmp_permissions|type_debug == "AnsibleUnicode"
     - logrotate_separate_xtmp is defined
